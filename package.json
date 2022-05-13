@@ -1,0 +1,23 @@
+{
+  "name": "sql-employee-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "start",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+    "dependencies": {
+      "express": "^4.17.1",
+      "jshint": "^2.12.0",
+      "mysql2": "^2.2.5",
+      "inquirer": "^8.2.4"},
+      
+    
+  "bugs": {
+    "url": "https://github.com/nicolmmm/sql-employee-tracker/issues"
+  },
+  "homepage": "https://github.com/nicolmmm/sql-employee-tracker#readme"
+    }
