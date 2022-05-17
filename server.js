@@ -20,6 +20,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the employee_manager database.`)
 );
 
+//main function called at npm start
 const promptUser = () => {
   return inquirer
     .prompt([
@@ -39,10 +40,12 @@ const promptUser = () => {
       },
     ])
     .then((result) => {
+      //"if" + "else if" hell depending on user response.
       if (
         JSON.stringify(result) ===
         '{"initialUserOptions":"view all departments"}'
       ) {
+        //hardcoded queries for viewing table
         db.query(`select * FROM department`, function (err, results) {
           if (err) {
             console.error("Couldn't find that");
@@ -54,6 +57,7 @@ const promptUser = () => {
       } else if (
         JSON.stringify(result) === '{"initialUserOptions":"view all roles"}'
       ) {
+        //hardcoded queries for viewing table
         db.query(`select * FROM roles`, function (err, results) {
           if (err) {
             console.error("Couldn't find that");
@@ -65,6 +69,7 @@ const promptUser = () => {
       } else if (
         JSON.stringify(result) === '{"initialUserOptions":"view all employees"}'
       ) {
+        //hardcoded queries for viewing table
         db.query(`select * FROM employee`, function (err, results) {
           if (err) {
             console.error("Couldn't find that");
@@ -76,6 +81,7 @@ const promptUser = () => {
       } else if (
         JSON.stringify(result) === '{"initialUserOptions":"add a department"}'
       ) {
+        //collecting data to pass to new department instance
         return inquirer
           .prompt([
             {
@@ -91,6 +97,7 @@ const promptUser = () => {
           ])
           .then((result) => {
             const { departmentName, departmentId } = result;
+            //parameterized query from data collected in above inquirer prompt
             db.query(
               `INSERT INTO department (id, dept_name) VALUES (?,?);`,
               [departmentId, departmentName],
@@ -107,6 +114,7 @@ const promptUser = () => {
       } else if (
         JSON.stringify(result) === '{"initialUserOptions":"add a role"}'
       ) {
+        //collecting data to pass to new role instance
         return inquirer
           .prompt([
             {
@@ -138,6 +146,7 @@ const promptUser = () => {
           ])
           .then((result) => {
             const { roleId, roleTitle, deptID, Salary } = result;
+            //parameterized query from data collected in above inquirer prompt
             db.query(
               `INSERT INTO roles (id, title, dept_id, salary) VALUES (?,?,?,?);`,
               [roleId, roleTitle, deptID, Salary],
@@ -185,6 +194,7 @@ const promptUser = () => {
           .then((result) => {
             const { employeeId, firstName, lastName, roleID, managerId } =
               result;
+            //parameterized query from data collected in above inquirer prompt
             db.query(
               `INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES (?,?,?,?,?);`,
               [employeeId, firstName, lastName, roleID, managerId],
@@ -202,14 +212,17 @@ const promptUser = () => {
         JSON.stringify(result) ===
         '{"initialUserOptions":"update an employee role"}'
       ) {
+        //updating an exisiting employee's role
         return inquirer
           .prompt([
+            //select employee by ID
             {
               type: "input",
               name: "updateEmployeeFromId",
               message:
                 "What is the ID of the employee who's role you would like to update?",
             },
+            //Select ID of employee's new role
             {
               type: "input",
               name: "updateEmployeeRoleTo",
@@ -219,6 +232,7 @@ const promptUser = () => {
           ])
           .then((result) => {
             const { updateEmployeeFromId, updateEmployeeRoleTo } = result;
+            //parameterised query to update DB.
             db.query(
               `UPDATE employee SET role_id=? WHERE id=?`,
               [updateEmployeeRoleTo, updateEmployeeFromId],
@@ -235,5 +249,5 @@ const promptUser = () => {
       }
     });
 };
-
+//function to run at start of program.
 promptUser();
